@@ -27,7 +27,7 @@ commands:
           when: on_fail
           command: |
             aws cloudformation delete-stack --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:5}
-            exit 1
+           
           
 
 
@@ -80,7 +80,7 @@ jobs:
               --region us-west-2
       # Fail the job intentionally to simulate an error.
       # Uncomment the line below if you want to fail the current step
-      - run: return 1
+      #- run: return 1
       - destroy_environment
 
 
@@ -129,10 +129,10 @@ jobs:
   # Note that the `--parameter-overrides` let you specify a value that override parameter value in the cloudfront.yml template file.
   # We are assuming that the `PipelineID` parameter represents the bucket ID. 
 
-#   aws cloudformation deploy \
-#   --template-file cloudfront.yml \
-#   --stack-name production-distro \
-#   --parameter-overrides PipelineID="course4mainbucket" \ # Name of the S3 bucket you created manually.
+   aws cloudformation deploy \
+   --template-file cloudfront.yml \
+   --stack-name production-distro \
+   --parameter-overrides PipelineID="course4mainbucket" \ # Name of the S3 bucket you created manually.
   
   # Job 1
   # Executes the bucket.yml - Deploy an S3 bucket, and interface with that bucket to synchronize the files between local and the bucket.
