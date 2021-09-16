@@ -79,7 +79,7 @@ jobs:
               --region us-west-2
       # Fail the job intentionally to simulate an error.
       # Uncomment the line below if you want to fail the current step
-      # - run: return 1
+       - run: return 1
       - destroy_environment
 
 
@@ -128,10 +128,10 @@ jobs:
   # Note that the `--parameter-overrides` let you specify a value that override parameter value in the cloudfront.yml template file.
   # We are assuming that the `PipelineID` parameter represents the bucket ID. 
 
-  # aws cloudformation deploy \
-  # --template-file cloudfront.yml \
-  # --stack-name production-distro \
-  # --parameter-overrides PipelineID="course4mainbucket" \ # Name of the S3 bucket you created manually.
+   aws cloudformation deploy \
+   --template-file cloudfront.yml \
+   --stack-name production-distro \
+   --parameter-overrides PipelineID="course4mainbucket" \ # Name of the S3 bucket you created manually.
   
   # Job 1
   # Executes the bucket.yml - Deploy an S3 bucket, and interface with that bucket to synchronize the files between local and the bucket.
@@ -149,7 +149,7 @@ jobs:
             --stack-name stack-create-bucket-${CIRCLE_WORKFLOW_ID:0:7} \
             --parameter-overrides MyBucketName="mybucket-${CIRCLE_WORKFLOW_ID:0:7}"
       # Uncomment the step below if yoou wish to upload all contents of the current directory to the S3 bucket
-      # - run: aws s3 sync . s3://mybucket-${CIRCLE_WORKFLOW_ID:0:7} --delete
+       - run: aws s3 sync . s3://mybucket-${CIRCLE_WORKFLOW_ID:0:7} --delete
   
   # Exercise: Promote to Production - Job 2
   # Fetch and save the pipeline ID (bucket ID) responsible for the last release.
@@ -197,15 +197,15 @@ jobs:
       - attach_workspace:
           at: ~/
       - run:
-          name: Destroy the previous production version's S3 bucket and CloudFormation stack. 
+          name: Destroy the previous production version S3 bucket and CloudFormation stack. 
           # Use $OldBucketID environment variable or mybucket644752792305 below.
           # Similarly, you can create and use $OldStackID environment variable in place of production-distro 
           command: |
             export OldBucketID=$(cat ~/textfile.txt)
             aws s3 rm "s3://${OldBucketID}" --recursive
-          #  aws cloudformation delete-stack --stack-name production-distro 
-          #  aws cloudformation delete-stack --stack-name stack-create-bucket-${CIRCLE_WORKFLOW_ID:0:7}
-          #  aws cloudformation delete-stack --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:5}
+            aws cloudformation delete-stack --stack-name production-distro 
+            aws cloudformation delete-stack --stack-name stack-create-bucket-${CIRCLE_WORKFLOW_ID:0:7}
+            aws cloudformation delete-stack --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:5}
 
 
 
